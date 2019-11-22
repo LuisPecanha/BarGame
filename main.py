@@ -31,10 +31,10 @@ class Bar:
 
     def openShop(self):
         print('Bar is opening')
-        workingThread = Thread(target = self.barberGoToWork)
+        workingThread = Thread(target = self.bartenderGoToWork)
         workingThread.start()
 
-    def barberGoToWork(self):
+    def bartenderGoToWork(self):
         while True:
             mutex.acquire()
 
@@ -42,7 +42,7 @@ class Bar:
                 c = self.waitingCustomers[0]
                 del self.waitingCustomers[0]
                 mutex.release()
-                self.bartender.cutHair(c)
+                self.bartender.serveDrink(c)
             else:
                 mutex.release()
                 print('Aaah, nothing to do, going to sleep')
@@ -51,7 +51,7 @@ class Bar:
 
     def enterBar(self, customer):
         mutex.acquire()
-        print('>> {0} entered the shop and is looking for a seat'.format(customer.name))
+        print('>> {0} entered the bar and is looking for a seat'.format(customer.name))
 
         if len(self.waitingCustomers) == self.numberOfSeats:
             print('Waiting room is full, {0} is leaving.'.format(customer.name))
@@ -76,7 +76,7 @@ class BarTender:
     def wakeUp(self):
         self.bartenderWorkingEvent.set()
 
-    def cutHair(self, customer):
+    def serveDrink(self, customer):
         #Set bartender as busy 
         self.bartenderWorkingEvent.clear()
 
