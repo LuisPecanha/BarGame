@@ -18,6 +18,20 @@ beverages = [ ['Caju', 10, 5, 1, 20],
               ['Piña Colada', 100, 60, 1, 400] ]
 
 class Bar:
+    """Class to represent the bar functioning correctly
+
+    Attributes:
+        bartender (Bartender): The bartender responsible for taking requests and serving them.
+        customerIntervalMin (int): Mininum time possible for another client to arrive
+        customerIntervalMax (int): Maximum time possible for another client to arrive
+        numberOfSeats (int): Number of maximum possible customers that can wait to be attended
+
+    Methods:
+        openShop: Used to start the thread responsible for bartender
+        bartenderGoToWork: See if there are customers waiting to be attended and free's the bartender to serve them
+        if there are, else sends the bartender to sleep.
+        enterBar: Adds a customer to the bar
+    """
     waitingCustomers = []
 
     def __init__(self, bartender, customerIntervalMin, customerIntervalMax, numberOfSeats):
@@ -31,11 +45,18 @@ class Bar:
         print('---------------------------------------')
 
     def openShop(self):
+        """Starts thread responsible for handling bartenders work
+        """
         print('Bar is opening')
         workingThread = Thread(target = self.bartenderGoToWork)
         workingThread.start()
 
     def bartenderGoToWork(self):
+        """Checks the semaphore to see if bartender is occupied and if there are available clients to be attended.
+        If waiting clients and unoccupied bartender, next waiting customer is served.
+        If no waiting clients and barber is not serving, he goes to sleep.
+        When customer arrives, the barber is awoken.
+        """
         while True:
             mutex.acquire()
 
@@ -51,6 +72,13 @@ class Bar:
                 print('Bartender woke up')
 
     def enterBar(self, customer):
+        """Responsible for handling customers that arrive in bar. 
+        If bar is full, makes customer leave the bar.
+        If bar is not full, the customer will wait to be served.
+
+        Args:
+            customer (Customer): Customer object that will enter the bar.
+        """
         mutex.acquire()
         print('>> {0} entered the bar and is looking for a seat'.format(customer.name))
 
@@ -59,32 +87,58 @@ class Bar:
             mutex.release()
         
         else:
-            print('{0} sat down in the waiting room'.format(customer.name))
+            print('{0} sat down on the balcony.'.format(customer.name))
             self.waitingCustomers.append(c)	
             mutex.release()
             bartender.wakeUp()
 
 class Beverage:
+    """Class to represent a beverage.
+
+    Attributes:
+        beverageIndex (int): Used to know which beverage to identify in the list beverages.
+    """
     def __init__(self, beverageIndex):
         self.beverageName = beverages[beverageIndex][0]
         self.beveragePrepareTime = beverages[beverageIndex][1]
         self.beverageCost = beverages[beverageIndex][2]
 
 class Customer:
+    """Class to represent a customer.
+
+    Attributes:
+        beveragesLevel (int): Used to hold the level of beverages that the bar holds and know how many options can be served.
+    """
     def __init__(self, beveragesLevel):
         self.name = names[(random.randrange(0, len(names)))]
         self.beverage = Beverage(random.randrange(0, beveragesLevel+1))
 
 class BarTender:
+    """Class to represent the bartender responsible for serving beverages.
+
+    Attributes:
+        customer (Customer): A Customer object that holds the necassary information such as name and beverage to be served.
+    """
     bartenderWorkingEvent = Event()
 
     def sleep(self):
+        """Puts the bartender thread to sleep.
+        """
         self.bartenderWorkingEvent.wait()
 
     def wakeUp(self):
+        """Wakes up the bartender thread.
+        """
         self.bartenderWorkingEvent.set()
 
     def serveDrink(self, customer):
+        """Makes the bartender serve the beverage to the customer and sets him busy. Also notifies when serving is done
+        and how much cash was gained.
+
+        Args:
+            customer (Customer): Customer object with information such as name and the beverage that will
+            be served.
+        """
         #Set bartender as busy 
         self.bartenderWorkingEvent.clear()
 
@@ -95,6 +149,13 @@ class BarTender:
         print('Just gained ${0} .'.format(customer.beverage.beverageCost))
 
 def printInterface(beveragesLevel, cash):
+    """Function to print the user interface showing him the available beverages that can be served at the bar
+    at the current moment and the cost to upgrade them or unlock new ones. Will also show cost and the upgrades available for the number of seats.
+
+    Args:
+        beveragesLevel (int): Index to know which beverages are available and their info.
+        cash (int): amount of cash the bar has to make upgrades.
+    """
     print("Available drinks:")
     if (beveragesLevel == 0):
         print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(beveragesLevel+1, beverages[0][0], beverages[0][1], beverages[0][2], beverages[0][3],  beverages[0][4]))
