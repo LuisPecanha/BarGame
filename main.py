@@ -98,6 +98,7 @@ class BarTender:
         self.bartenderWorkingEvent.clear()
 
         print('{0} is getting a {1}'.format(customer.name, customer.beverage.beverageName))
+        print("{0}".format(customer.beverage.beverageCost))
         beveragePreparationTime = customer.beverage.beveragePrepareTime
         time.sleep(beveragePreparationTime)
         print('{0} is done'.format(customer.name))
