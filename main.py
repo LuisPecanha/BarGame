@@ -118,8 +118,7 @@ if __name__ == '__main__':
         c = customers.pop()	
         # New customer enters the barbershop
         barberShop.enterBarberShop(c)
-        # customerInterval = random.randrange(customerIntervalMin, customerIntervalMax+1)
-        customerInterval = 4
+        customerInterval = random.randrange(customerIntervalMin, customerIntervalMax+1)
         time.sleep(customerInterval)
         
         # Test lines
