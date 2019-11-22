@@ -80,7 +80,7 @@ class BarTender:
         #Set bartender as busy 
         self.bartenderWorkingEvent.clear()
 
-        print('{0} is having a haircut'.format(customer.name))
+        print('{0} is getting a drink'.format(customer.name))
 
         #randomHairCuttingTime = random.randrange(preparoBebidaMin, preparoBebidaMax+1)
         randomHairCuttingTime = 6
