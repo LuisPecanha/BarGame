@@ -17,8 +17,6 @@ beverages = [ ['Caju', 10, 5, 1, 20],
               ['Margarita', 60, 35, 1, 240], 
               ['Piña Colada', 100, 60, 1, 400] ]
 
-def beverageHandler():
-    print()
 
 # Interval in seconds
 preparoBebidaMin = 3
@@ -149,8 +147,6 @@ if __name__ == '__main__':
     bar.openShop()
 
     while len(customers) > 0:
-
-
 
         c = customers.pop()
         cash += c.beverage.beverageCost	
