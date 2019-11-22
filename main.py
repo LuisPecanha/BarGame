@@ -17,11 +17,6 @@ beverages = [ ['Caju', 10, 5, 1, 20],
               ['Margarita', 60, 35, 1, 240], 
               ['Piña Colada', 100, 60, 1, 400] ]
 
-
-# Interval in seconds
-preparoBebidaMin = 3
-preparoBebidaMax = 15
-
 class Bar:
     waitingCustomers = []
 
@@ -33,8 +28,6 @@ class Bar:
         print('Bar initilized with {0} seats'.format(numberOfSeats))
         print('Customer min interval {0}'.format(customerIntervalMin))
         print('Customer max interval {0}'.format(customerIntervalMax))
-        print('Beverage preparation min duration {0}'.format(preparoBebidaMin))
-        print('Beverage preparation max duration {0}'.format(preparoBebidaMax))
         print('---------------------------------------')
 
     def openShop(self):
