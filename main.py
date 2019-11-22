@@ -11,17 +11,17 @@ names = ['João', 'Mario', 'Isabela', 'Kalinka', 'Kamila', 'Paçoca', 'Tiburcio'
          'Kristrun', 'Bakugou', 'Todoroki', 'PeidaFogo', 'Naruto', 'Paloma', 'Giulia', 'Laura', 'Mavis', 'Jessica']
 
 # Interval in seconds
-customerIntervalMin = 5
-customerIntervalMax = 15
 haircutDurationMin = 3
 haircutDurationMax = 15
 
 class BarberShop:
     waitingCustomers = []
 
-    def __init__(self, barber, numberOfSeats):
+    def __init__(self, barber, customerIntervalMin, customerIntervalMax, numberOfSeats):
         self.barber = barber
         self.numberOfSeats = numberOfSeats
+        self.customerIntervalMin = customerIntervalMin
+        self.customerIntervalMax = customerIntervalMax
         print('BarberShop initilized with {0} seats'.format(numberOfSeats))
         print('Customer min interval {0}'.format(customerIntervalMin))
         print('Customer max interval {0}'.format(customerIntervalMax))
@@ -65,7 +65,7 @@ class BarberShop:
 
 class Customer:
     def __init__(self):
-        self.name = names[(random.randrange(0, len(names)+1))]
+        self.name = names[(random.randrange(0, len(names)))]
 
 class Barber:
     barberWorkingEvent = Event()
@@ -90,6 +90,11 @@ class Barber:
 
 
 if __name__ == '__main__':
+
+    customerIntervalMin = 3     # 3 seconds
+    customerIntervalMax = 15    # 15 seconds
+    # Time between arrival of customers will differ between 3 and 15 seconds
+
     customers = []
     customers.append(Customer())
     customers.append(Customer())
@@ -111,7 +116,7 @@ if __name__ == '__main__':
 
     barber = Barber()
 
-    barberShop = BarberShop(barber, numberOfSeats=3)
+    barberShop = BarberShop(barber, customerIntervalMin, customerIntervalMax, numberOfSeats=3)
     barberShop.openShop()
 
     while len(customers) > 0:
