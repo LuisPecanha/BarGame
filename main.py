@@ -39,10 +39,10 @@ class Bar:
         self.numberOfSeats = numberOfSeats
         self.customerIntervalMin = customerIntervalMin
         self.customerIntervalMax = customerIntervalMax
-        print('Bar initilized with {0} seats'.format(numberOfSeats))
-        print('Customer min interval {0}'.format(customerIntervalMin))
-        print('Customer max interval {0}'.format(customerIntervalMax))
-        print('---------------------------------------')
+        # print('Bar initilized with {0} seats'.format(numberOfSeats))
+        # print('Customer min interval {0}'.format(customerIntervalMin))
+        # print('Customer max interval {0}'.format(customerIntervalMax))
+        print('----------------------------------------')
 
     def openShop(self):
         """Starts thread responsible for handling bartenders work
@@ -156,6 +156,8 @@ def printInterface(beveragesLevel, cash):
         beveragesLevel (int): Index to know which beverages are available and their info.
         cash (int): amount of cash the bar has to make upgrades.
     """
+
+    print("-" * 40)
     print("Available drinks:")
     if (beveragesLevel == 0):
         print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(beveragesLevel+1, beverages[0][0], beverages[0][1], beverages[0][2], beverages[0][3],  beverages[0][4]))
@@ -165,6 +167,7 @@ def printInterface(beveragesLevel, cash):
             print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(i+1, beverages[i][0], beverages[i][1], beverages[i][2], beverages[i][3], beverages[i][4]))
 
     print("Cash gained until now: $ {0}.00".format(cash))
+    print("-" * 40)
 
 if __name__ == '__main__':
 
