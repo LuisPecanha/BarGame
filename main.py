@@ -98,10 +98,10 @@ class BarTender:
         self.bartenderWorkingEvent.clear()
 
         print('{0} is getting a {1}'.format(customer.name, customer.beverage.beverageName))
-        print("{0}".format(customer.beverage.beverageCost))
         beveragePreparationTime = customer.beverage.beveragePrepareTime
         time.sleep(beveragePreparationTime)
         print('{0} is done'.format(customer.name))
+        print('Just gained ${0} .'.format(customer.beverage.beverageCost))
 
 def printInterface(beveragesLevel, cash):
     print("Available drinks:")
@@ -112,11 +112,11 @@ def printInterface(beveragesLevel, cash):
         for i in range(1 , beveragesLevel+1):
             print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(i+1, beverages[i][0], beverages[i][1], beverages[i][2], beverages[i][3], beverages[i][4]))
 
-    print("Cash gained until now: {0}", cash)
+    print("Cash gained until now: $ {0}.00".format(cash))
 
 if __name__ == '__main__':
 
-    beveragesLevel = 4  # Variable to track level of bevarages of bar and know which ones are available
+    beveragesLevel = 0  # Variable to track level of bevarages of bar and know which ones are available
     cash = 0
 
     customerIntervalMin = 3     # 3 seconds
@@ -152,11 +152,13 @@ if __name__ == '__main__':
 
 
 
-        c = customers.pop()	
+        c = customers.pop()
+        cash += c.beverage.beverageCost	
         # New customer enters the bar
         bar.enterBar(c)
         customerInterval = random.randrange(customerIntervalMin, customerIntervalMax+1)
         time.sleep(customerInterval)
+        printInterface(beveragesLevel, cash)
         
         # Test lines
         # print("*" * 40)
