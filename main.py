@@ -11,26 +11,26 @@ names = ['João', 'Mario', 'Isabela', 'Kalinka', 'Kamila', 'Paçoca', 'Tiburcio'
          'Kristrun', 'Bakugou', 'Todoroki', 'PeidaFogo', 'Naruto', 'Paloma', 'Giulia', 'Laura', 'Mavis', 'Jessica']
 
 # Interval in seconds
-haircutDurationMin = 3
-haircutDurationMax = 15
+preparoBebidaMin = 3
+preparoBebidaMax = 15
 
-class BarberShop:
+class Bar:
     waitingCustomers = []
 
-    def __init__(self, barber, customerIntervalMin, customerIntervalMax, numberOfSeats):
-        self.barber = barber
+    def __init__(self, bartender, customerIntervalMin, customerIntervalMax, numberOfSeats):
+        self.bartender = bartender
         self.numberOfSeats = numberOfSeats
         self.customerIntervalMin = customerIntervalMin
         self.customerIntervalMax = customerIntervalMax
-        print('BarberShop initilized with {0} seats'.format(numberOfSeats))
+        print('Bar initilized with {0} seats'.format(numberOfSeats))
         print('Customer min interval {0}'.format(customerIntervalMin))
         print('Customer max interval {0}'.format(customerIntervalMax))
-        print('Haircut min duration {0}'.format(haircutDurationMin))
-        print('Haircut max duration {0}'.format(customerIntervalMax))
+        print('Haircut min duration {0}'.format(preparoBebidaMin))
+        print('Haircut max duration {0}'.format(preparoBebidaMax))
         print('---------------------------------------')
 
     def openShop(self):
-        print('Barber shop is opening')
+        print('Bar is opening')
         workingThread = Thread(target = self.barberGoToWork)
         workingThread.start()
 
@@ -42,14 +42,14 @@ class BarberShop:
                 c = self.waitingCustomers[0]
                 del self.waitingCustomers[0]
                 mutex.release()
-                self.barber.cutHair(c)
+                self.bartender.cutHair(c)
             else:
                 mutex.release()
-                print('Aaah, all done, going to sleep')
-                barber.sleep()
-                print('Barber woke up')
+                print('Aaah, nothing to do, going to sleep')
+                bartender.sleep()
+                print('Bartender woke up')
 
-    def enterBarberShop(self, customer):
+    def enterBar(self, customer):
         mutex.acquire()
         print('>> {0} entered the shop and is looking for a seat'.format(customer.name))
 
@@ -61,28 +61,28 @@ class BarberShop:
             print('{0} sat down in the waiting room'.format(customer.name))
             self.waitingCustomers.append(c)	
             mutex.release()
-            barber.wakeUp()
+            bartender.wakeUp()
 
 class Customer:
     def __init__(self):
         self.name = names[(random.randrange(0, len(names)))]
 
-class Barber:
-    barberWorkingEvent = Event()
+class BarTender:
+    bartenderWorkingEvent = Event()
 
     def sleep(self):
-        self.barberWorkingEvent.wait()
+        self.bartenderWorkingEvent.wait()
 
     def wakeUp(self):
-        self.barberWorkingEvent.set()
+        self.bartenderWorkingEvent.set()
 
     def cutHair(self, customer):
-        #Set barber as busy 
-        self.barberWorkingEvent.clear()
+        #Set bartender as busy 
+        self.bartenderWorkingEvent.clear()
 
         print('{0} is having a haircut'.format(customer.name))
 
-        #randomHairCuttingTime = random.randrange(haircutDurationMin, haircutDurationMax+1)
+        #randomHairCuttingTime = random.randrange(preparoBebidaMin, preparoBebidaMax+1)
         randomHairCuttingTime = 6
         # print("Haircut Time = {0}".format(randomHairCuttingTime))
         time.sleep(randomHairCuttingTime)
@@ -114,15 +114,15 @@ if __name__ == '__main__':
     customers.append(Customer())
     customers.append(Customer())
 
-    barber = Barber()
+    bartender = BarTender()
 
-    barberShop = BarberShop(barber, customerIntervalMin, customerIntervalMax, numberOfSeats=3)
-    barberShop.openShop()
+    bar = Bar(bartender, customerIntervalMin, customerIntervalMax, numberOfSeats=3)
+    bar.openShop()
 
     while len(customers) > 0:
         c = customers.pop()	
-        # New customer enters the barbershop
-        barberShop.enterBarberShop(c)
+        # New customer enters the bar
+        bar.enterBar(c)
         customerInterval = random.randrange(customerIntervalMin, customerIntervalMax+1)
         time.sleep(customerInterval)
         
