@@ -239,8 +239,8 @@ def checkReputation(barReputation, numberOfVisits):
         barReputation (int): The higher, more frequently customers will appear at bar
         numberOfVisits (int): Is the number of customers that have been to the bar
     """
-    if barReputation >= 10:
-        return 10
+    if barReputation >= 5:
+        return 5
     else:
         if numberOfVisits == 0:
             return 0
@@ -260,7 +260,7 @@ if __name__ == '__main__':
     numberOfVisits = 0      # Tracks how much clients were served. Is used to calculate the bar reputation
 
     customerIntervalMin = 3     # 3 seconds
-    customerIntervalMax = 15    # 15 seconds, will decrease based on reputation
+    customerIntervalMax = 10    # 15 seconds, will decrease based on reputation
     # Initial time between arrival of customers will differ between 3 and 15 seconds
 
     customers = []
