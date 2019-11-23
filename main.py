@@ -162,6 +162,7 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, numberOfVisits, barR
         bar (Bar): Bar object used to show number of waiting customers and available seats.
         beveragesLevel (int): Index to know which beverages are available and their info.
         beverageUnlockCost (int): Amount of cash necessary to aquire new beverage to be served.
+        barReputation (int): Keeps track of the bar reputation that makes more customers appear.
         cash (int): amount of cash the bar has to make upgrades.
     """
     global cash
@@ -221,7 +222,6 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
             beverages[0][3] += 1                                # Upgrades Caju level
             beverages[0][4] * 2                                 # Increases next Caju upgrade cost by twice its previous cost
             beverages[0][1] /= beverages[0][3]                  # Decreases caju preparation time by half
-            beverages[0][2] *= 1.5                              # Multiplies Caju price by 1.5
             print("Upgraded {0} skills!".format(beverages[0][0]))   # Prints out upgrade message
 
             return cash, beveragesLevel, beverageUnlockCost
