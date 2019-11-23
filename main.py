@@ -224,25 +224,27 @@ def checkReputation(barReputation, numberOfVisits):
         numberOfVisits (int): Is the number of customers that have been to the bar
     """
     if barReputation >= 10:
-        return
+        return 10
     else:
         if numberOfVisits == 0:
-            return
+            return 0
         elif (numberOfVisits % 100) == 0:
             barReputation += 1
             return barReputation
+
+    return barReputation
     
 
 if __name__ == '__main__':
 
-    beveragesLevel = 0  # Variable to track level of bevarages of bar and know which ones are available
+    beveragesLevel = 0      # Variable to track level of bevarages of bar and know which ones are available
     beverageUnlockCost = 50 # Variable to register the cash necessary to unlock new beverage
-    barReputation = 0   # The higher this gets, higher the chances of more customers coming in
-    numberOfVisits = 0  # Tracks how much clients were served. Is used to calculate the bar reputation
+    barReputation = 0       # The higher this gets, higher the chances of more customers coming in
+    numberOfVisits = 0      # Tracks how much clients were served. Is used to calculate the bar reputation
 
     customerIntervalMin = 3     # 3 seconds
     customerIntervalMax = 15    # 15 seconds, will decrease based on reputation
-    # Time between arrival of customers will differ between 3 and 15 seconds
+    # Initial time between arrival of customers will differ between 3 and 15 seconds
 
     customers = []
     customers.append(Customer(beveragesLevel))
@@ -257,13 +259,15 @@ if __name__ == '__main__':
 
     while len(customers) > 0:
         
-        c = customers.pop()                         #Gets a customer from customer list
-        numberOfVisits += 1                            #+1 visitor
-        customers.append(Customer(beveragesLevel))  #Appends a new customer to list
+        c = customers.pop()                                                     # Gets a customer from customer list
+        numberOfVisits += 1                                                     # +1 visitor
+        barReputation = checkReputation(barReputation, numberOfVisits)          # Updates bar reputation if necessary
+        customers.append(Customer(beveragesLevel))                              # Appends a new customer to list
         # New customer enters the bar
         bar.enterBar(c)
         
-        customerInterval = random.randrange(customerIntervalMin, (customerIntervalMax+1) - barReputation)
+        customerIntervalMax -= barReputation     
+        customerInterval = random.randrange(customerIntervalMin, (customerIntervalMax+1))
         time.sleep(customerInterval)                
 
         printInterface(bar, beveragesLevel, beverageUnlockCost)
@@ -274,7 +278,7 @@ if __name__ == '__main__':
         """
         userInput = int(input("Choose an option: "))
         cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
-
+        
         # Test lines
         # print("*" * 40)
         # print("Number of waiting customers/Number of seats")
