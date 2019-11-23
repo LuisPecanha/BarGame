@@ -217,12 +217,12 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
     # User chose to upgrade Caju
     elif userInput == 2:
         if cash >= beverages[0][4]:
-            cash -= beverages[0][4]
-            beverages[0][3] += 1
-            beverages[0][4] * 2
-            beverages[0][1] /= beverages[0][3]
-            beverages[0][2] *= 1.5
-            print("Upgraded {0} skills!".format(beverages[0][0]))
+            cash -= beverages[0][4]                             # Subtracts Caju upgrade cost from cash
+            beverages[0][3] += 1                                # Upgrades Caju level
+            beverages[0][4] * 2                                 # Increases next Caju upgrade cost by twice its previous cost
+            beverages[0][1] /= beverages[0][3]                  # Decreases caju preparation time by half
+            beverages[0][2] *= 1.5                              # Multiplies Caju price by 1.5
+            print("Upgraded {0} skills!".format(beverages[0][0]))   # Prints out upgrade message
 
             return cash, beveragesLevel, beverageUnlockCost
         
