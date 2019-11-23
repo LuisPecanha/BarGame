@@ -176,9 +176,9 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, numberOfVisits, barR
         for i in range(1 , beveragesLevel+1):
             print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(i+1, beverages[i][0], beverages[i][1], beverages[i][2], beverages[i][3], beverages[i][4]))
 
-    print("Cash gained until now: $ {0}.00".format(cash))
-    print("Cost to unlock new beverage - {0}: $ {1}.00".format(beverages[beveragesLevel+1][0], beverageUnlockCost))
-    print("Options available: 1 -> Unlock new drink | 9 -> Continue")
+    print("Cash gained until now: $ {0}".format(cash))
+    print("Cost to unlock new beverage - {0}: $ {1}".format(beverages[beveragesLevel+1][0], beverageUnlockCost))
+    print("Options available: 1 -> Unlock new drink | 2 -> Upgrade Caju | 9 -> Continue")
     print("-" * 40)
 
 def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
@@ -210,6 +210,22 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
 
             return cash, beveragesLevel, beverageUnlockCost
 
+        else:
+            print("Not enough cash, stranger!")
+            print("-" * 40)
+
+    # User chose to upgrade Caju
+    elif userInput == 2:
+        if cash >= beverages[0][4]:
+            cash -= beverages[0][4]
+            beverages[0][3] += 1
+            beverages[0][4] * 2
+            beverages[0][1] /= beverages[0][3]
+            beverages[0][2] *= 1.5
+            print("Upgraded {0} skills!".format(beverages[0][0]))
+
+            return cash, beveragesLevel, beverageUnlockCost
+        
         else:
             print("Not enough cash, stranger!")
             print("-" * 40)
