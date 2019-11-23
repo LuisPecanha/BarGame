@@ -148,7 +148,7 @@ class BarTender:
         print('{0} is done'.format(customer.name))
         print('Just gained ${0} .'.format(customer.beverage.beverageCost))
 
-def printInterface(beveragesLevel, cash):
+def printInterface(bar ,beveragesLevel, beverageUnlockCost, cash):
     """Function to print the user interface showing him the available beverages that can be served at the bar
     at the current moment and the cost to upgrade them or unlock new ones. Will also show cost and the upgrades available for the number of seats.
 
@@ -158,6 +158,7 @@ def printInterface(beveragesLevel, cash):
     """
 
     print("-" * 40)
+    print("Seats occupied: {0}/{1}".format(len(bar.waitingCustomers), bar.numberOfSeats))
     print("Available drinks:")
     if (beveragesLevel == 0):
         print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(beveragesLevel+1, beverages[0][0], beverages[0][1], beverages[0][2], beverages[0][3],  beverages[0][4]))
@@ -167,11 +168,14 @@ def printInterface(beveragesLevel, cash):
             print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(i+1, beverages[i][0], beverages[i][1], beverages[i][2], beverages[i][3], beverages[i][4]))
 
     print("Cash gained until now: $ {0}.00".format(cash))
+    print("Cost to unlock new beverage - {0}: $ {1}.00".format(beverages[beveragesLevel+1][0], beverageUnlockCost))
+    print("Options available: 1 -> Unlock new drink |")
     print("-" * 40)
 
 if __name__ == '__main__':
 
     beveragesLevel = 0  # Variable to track level of bevarages of bar and know which ones are available
+    beverageUnlockCost = 50 # Variable to register the cash necessary to unlock new beverage
     cash = 0
 
     customerIntervalMin = 3     # 3 seconds
@@ -200,7 +204,7 @@ if __name__ == '__main__':
     bartender = BarTender()
 
     bar = Bar(bartender, customerIntervalMin, customerIntervalMax, numberOfSeats=3)
-    printInterface(beveragesLevel, cash)
+    printInterface(bar, beveragesLevel, beverageUnlockCost, cash)
     bar.openShop()
 
     while len(customers) > 0:
@@ -211,7 +215,7 @@ if __name__ == '__main__':
         bar.enterBar(c)
         customerInterval = random.randrange(customerIntervalMin, customerIntervalMax+1)
         time.sleep(customerInterval)
-        printInterface(beveragesLevel, cash)
+        printInterface(bar, beveragesLevel, beverageUnlockCost, cash)
         
         # Test lines
         # print("*" * 40)
