@@ -179,7 +179,7 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, numberOfVisits, barR
 
     print("Cash gained until now: $ {0}".format(cash))
     print("Cost to unlock new beverage - {0}: $ {1}".format(beverages[beveragesLevel+1][0], beverageUnlockCost))
-    print("Options available: 1 -> Unlock new drink | 2 -> Upgrade Caju | 9 -> Continue")
+    print("Options available: 1 -> Unlock new drink | 2 -> Upgrade Caju | 3 -> Upgrade Corote | 4 -> Upgrade Suco de Bagre | 5 -> Upgrade Margarita | 6 -> Upgrade Piña Colada | 9 -> Continue")
     print("-" * 40)
 
 def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
@@ -221,7 +221,7 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
             cash -= beverages[0][4]                             # Subtracts Caju upgrade cost from cash
             beverages[0][3] += 1                                # Upgrades Caju level
             beverages[0][4] * 2                                 # Increases next Caju upgrade cost by twice its previous cost
-            beverages[0][1] /= beverages[0][3]                  # Decreases caju preparation time by half
+            beverages[0][1] /= beverages[0][3]                  # Decreases Caju preparation time by half
             print("Upgraded {0} skills!".format(beverages[0][0]))   # Prints out upgrade message
 
             return cash, beveragesLevel, beverageUnlockCost
@@ -229,6 +229,83 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
         else:
             print("Not enough cash, stranger!")
             print("-" * 40)
+    
+    # User chose to upgrade corote
+    elif userInput == 3:
+        if beveragesLevel >= 1:
+            if cash >= beverages[1][4]:
+                cash -= beverages[1][4]                             # Subtracts Corote upgrade cost from cash
+                beverages[1][3] += 1                                # Upgrades Corote level
+                beverages[1][4] * 2                                 # Increases next Corote upgrade cost by twice its previous cost
+                beverages[1][1] /= beverages[1][3]                  # Decreases Corote preparation time by half
+                print("Upgraded {0} skills!".format(beverages[1][0]))   # Prints out upgrade message
+
+            else:
+                print("Not enough cash, stranger!")
+                print("-" * 40)
+        else:
+            print("Have not unlocked this beverage yet.")
+            print("-" * 40)
+            return cash, beveragesLevel, beverageUnlockCost
+
+    # Player chose to upgrade Suco de Bagre Skills
+    elif userInput == 4:
+        if beveragesLevel >= 2:
+            if cash >= beverages[2][4]:
+                cash -= beverages[2][4]                             # Subtracts Suco de Bagre upgrade cost from cash
+                beverages[2][3] += 1                                # Upgrades Suco de Bagre level
+                beverages[2][4] * 2                                 # Increases next Suco de Bagre upgrade cost by twice its previous cost
+                beverages[2][1] /= beverages[2][3]                  # Decreases Suco de Bagre preparation time by half
+                print("Upgraded {0} skills!".format(beverages[2][0]))   # Prints out upgrade message
+
+            else:
+                print("Not enough cash, stranger!")
+                print("-" * 40)
+        else:
+            print("Have not unlocked this beverage yet.")
+            print("-" * 40)
+            return cash, beveragesLevel, beverageUnlockCost
+
+    # Player chose to upgrade Margarita Skills
+    elif userInput == 5:
+        if beveragesLevel >= 3:
+            if cash >= beverages[3][4]:
+                cash -= beverages[3][4]                             # Subtracts Margarita upgrade cost from cash
+                beverages[3][3] += 1                                # Upgrades Margarita level
+                beverages[3][4] * 2                                 # Increases next Margarita upgrade cost by twice its previous cost
+                beverages[3][1] /= beverages[3][3]                  # Decreases Margarita preparation time by half
+                print("Upgraded {0} skills!".format(beverages[3][0]))   # Prints out upgrade message
+
+            else:
+                print("Not enough cash, stranger!")
+                print("-" * 40)
+        else:
+            print("Have not unlocked this beverage yet.")
+            print("-" * 40)
+            return cash, beveragesLevel, beverageUnlockCost
+
+    # Player chose to upgrade Piña Colada Skills
+    elif userInput == 6:
+        if beveragesLevel >= 4:
+            if cash >= beverages[4][4]:
+                cash -= beverages[4][4]                             # Subtracts Piña Colada upgrade cost from cash
+                beverages[4][3] += 1                                # Upgrades Piña Colada level
+                beverages[4][4] * 2                                 # Increases next Piña Colada upgrade cost by twice its previous cost
+                beverages[4][1] /= beverages[4][3]                  # Decreases Piña Colada preparation time by half
+                print("Upgraded {0} skills!".format(beverages[4][0]))   # Prints out upgrade message
+
+            else:
+                print("Not enough cash, stranger!")
+                print("-" * 40)
+        else:
+            print("Have not unlocked this beverage yet.")
+            print("-" * 40)
+            return cash, beveragesLevel, beverageUnlockCost
+    
+    # User put an invalid input
+    else:
+        print("Not a valid option.")
+        print("-" * 40)
 
     return cash, beveragesLevel, beverageUnlockCost
 
@@ -260,8 +337,8 @@ if __name__ == '__main__':
     numberOfVisits = 0      # Tracks how much clients were served. Is used to calculate the bar reputation
 
     customerIntervalMin = 3     # 3 seconds
-    customerIntervalMax = 10    # 15 seconds, will decrease based on reputation
-    # Initial time between arrival of customers will differ between 3 and 15 seconds
+    customerIntervalMax = 10    # 10 seconds, will decrease based on reputation
+    # Initial time between arrival of customers will differ between 3 and 10 seconds
 
     customers = []
     customers.append(Customer(beveragesLevel))
