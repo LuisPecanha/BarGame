@@ -153,7 +153,9 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, cash):
     at the current moment and the cost to upgrade them or unlock new ones. Will also show cost and the upgrades available for the number of seats.
 
     Args:
+        bar (Bar): Bar object used to show number of waiting customers and available seats.
         beveragesLevel (int): Index to know which beverages are available and their info.
+        beverageUnlockCost (int): Amount of cash necessary to aquire new beverage to be served.
         cash (int): amount of cash the bar has to make upgrades.
     """
 
@@ -169,8 +171,30 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, cash):
 
     print("Cash gained until now: $ {0}.00".format(cash))
     print("Cost to unlock new beverage - {0}: $ {1}.00".format(beverages[beveragesLevel+1][0], beverageUnlockCost))
-    print("Options available: 1 -> Unlock new drink |")
+    print("Options available: 1 -> Unlock new drink | 9 -> Continue")
     print("-" * 40)
+
+def inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost):
+    # User chose to continue as usual
+    if userInput == 9:
+        print("Continue on my friend.")
+        print("-" * 40)
+        return cash, beveragesLevel, beverageUnlockCost
+    
+    # User chose to aquire new beverage.
+    elif userInput == 1:
+        if cash >= beverageUnlockCost:
+            cash -= beverageUnlockCost
+            beveragesLevel += 1
+            beverageUnlockCost *= 10
+
+            return cash, beveragesLevel, beverageUnlockCost
+
+        else:
+            print("Not enough cash, stranger!")
+            print("-" * 40)
+
+    return cash, beveragesLevel, beverageUnlockCost
 
 if __name__ == '__main__':
 
@@ -186,20 +210,6 @@ if __name__ == '__main__':
     customers.append(Customer(beveragesLevel))
     customers.append(Customer(beveragesLevel))
     customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
-    customers.append(Customer(beveragesLevel))
 
     bartender = BarTender()
 
@@ -209,14 +219,21 @@ if __name__ == '__main__':
 
     while len(customers) > 0:
 
-        c = customers.pop()
-        cash += c.beverage.beverageCost	
+        c = customers.pop()                         #Gets a customer from customer list
+        customers.append(Customer(beveragesLevel))  #Appends a new customer to list
         # New customer enters the bar
         bar.enterBar(c)
+        cash += c.beverage.beverageCost	            #Gets cash from the customers beverage cost
+        
         customerInterval = random.randrange(customerIntervalMin, customerIntervalMax+1)
-        time.sleep(customerInterval)
+        time.sleep(customerInterval)                
+
         printInterface(bar, beveragesLevel, beverageUnlockCost, cash)
         
+        # Handling user input
+        userInput = int(input("Choose an option: "))
+        cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost)
+
         # Test lines
         # print("*" * 40)
         # print("Number of waiting customers/Number of seats")
