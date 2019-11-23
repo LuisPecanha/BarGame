@@ -175,6 +175,14 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, cash):
     print("-" * 40)
 
 def inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost):
+    """Function to handle the input that player chooses.
+
+    Args:
+        userInput (int): The option that player chose.
+        cash (int): Money that bar has to make upgrades.
+        beveragesLevel (int): Number of beverages that bar can currently serve.
+        beverageUnlockCost (int): Money necessary to aquire new beverage to serve.
+    """
     # User chose to continue as usual
     if userInput == 9:
         print("Continue on my friend.")
