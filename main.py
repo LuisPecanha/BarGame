@@ -182,7 +182,7 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost):
     print("-" * 40)
 
 def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
-    """Function to handle the input that player chooses.
+    """Function to handle the input that player chooses and do the acordding actions
 
     Args:
         userInput (int): The option that player chose.
@@ -217,6 +217,12 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
     return cash, beveragesLevel, beverageUnlockCost
 
 def checkReputation(barReputation, numberOfVisits):
+    """Checks number of visits of bar and updates the reputation when necessary
+
+    Args:
+        barReputation (int): The higher, more frequently customers will appear at bar
+        numberOfVisits (int): Is the number of customers that have been to the bar
+    """
     if barReputation >= 10:
         return
     else:
@@ -250,8 +256,9 @@ if __name__ == '__main__':
     bar.openShop()
 
     while len(customers) > 0:
-
+        
         c = customers.pop()                         #Gets a customer from customer list
+        numberOfVisits += 1                            #+1 visitor
         customers.append(Customer(beveragesLevel))  #Appends a new customer to list
         # New customer enters the bar
         bar.enterBar(c)
