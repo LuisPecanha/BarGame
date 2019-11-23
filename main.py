@@ -17,6 +17,8 @@ beverages = [ ['Caju', 10, 5, 1, 20],
               ['Margarita', 60, 35, 1, 240], 
               ['Piña Colada', 100, 60, 1, 400] ]
 
+cash = 0
+
 class Bar:
     """Class to represent the bar functioning correctly
 
@@ -138,7 +140,10 @@ class BarTender:
         Args:
             customer (Customer): Customer object with information such as name and the beverage that will
             be served.
+            cash (int): Global variable to store the cash that bar has available. Updated here
+            when client gets beverage.
         """
+        global cash
         #Set bartender as busy 
         self.bartenderWorkingEvent.clear()
 
@@ -146,9 +151,10 @@ class BarTender:
         beveragePreparationTime = customer.beverage.beveragePrepareTime
         time.sleep(beveragePreparationTime)
         print('{0} is done'.format(customer.name))
+        cash += customer.beverage.beverageCost
         print('Just gained ${0} .'.format(customer.beverage.beverageCost))
 
-def printInterface(bar ,beveragesLevel, beverageUnlockCost, cash):
+def printInterface(bar ,beveragesLevel, beverageUnlockCost):
     """Function to print the user interface showing him the available beverages that can be served at the bar
     at the current moment and the cost to upgrade them or unlock new ones. Will also show cost and the upgrades available for the number of seats.
 
@@ -158,6 +164,7 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, cash):
         beverageUnlockCost (int): Amount of cash necessary to aquire new beverage to be served.
         cash (int): amount of cash the bar has to make upgrades.
     """
+    global cash
 
     print("-" * 40)
     print("Seats occupied: {0}/{1}".format(len(bar.waitingCustomers), bar.numberOfSeats))
@@ -174,7 +181,7 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, cash):
     print("Options available: 1 -> Unlock new drink | 9 -> Continue")
     print("-" * 40)
 
-def inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost):
+def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
     """Function to handle the input that player chooses.
 
     Args:
@@ -182,7 +189,10 @@ def inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost):
         cash (int): Money that bar has to make upgrades.
         beveragesLevel (int): Number of beverages that bar can currently serve.
         beverageUnlockCost (int): Money necessary to aquire new beverage to serve.
+        cash (int): Here cash is modified when an upgrade happens
     """
+    global cash
+
     # User chose to continue as usual
     if userInput == 9:
         print("Continue on my friend.")
@@ -206,14 +216,26 @@ def inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost):
 
     return cash, beveragesLevel, beverageUnlockCost
 
+def checkReputation(barReputation, numberOfVisits):
+    if barReputation >= 10:
+        return
+    else:
+        if numberOfVisits == 0:
+            return
+        elif (numberOfVisits % 100) == 0:
+            barReputation += 1
+            return barReputation
+    
+
 if __name__ == '__main__':
 
     beveragesLevel = 0  # Variable to track level of bevarages of bar and know which ones are available
     beverageUnlockCost = 50 # Variable to register the cash necessary to unlock new beverage
-    cash = 0
+    barReputation = 0   # The higher this gets, higher the chances of more customers coming in
+    numberOfVisits = 0  # Tracks how much clients were served. Is used to calculate the bar reputation
 
     customerIntervalMin = 3     # 3 seconds
-    customerIntervalMax = 15    # 15 seconds
+    customerIntervalMax = 15    # 15 seconds, will decrease based on reputation
     # Time between arrival of customers will differ between 3 and 15 seconds
 
     customers = []
@@ -224,7 +246,7 @@ if __name__ == '__main__':
     bartender = BarTender()
 
     bar = Bar(bartender, customerIntervalMin, customerIntervalMax, numberOfSeats=3)
-    printInterface(bar, beveragesLevel, beverageUnlockCost, cash)
+    printInterface(bar, beveragesLevel, beverageUnlockCost)
     bar.openShop()
 
     while len(customers) > 0:
@@ -233,19 +255,18 @@ if __name__ == '__main__':
         customers.append(Customer(beveragesLevel))  #Appends a new customer to list
         # New customer enters the bar
         bar.enterBar(c)
-        cash += c.beverage.beverageCost	            #Gets cash from the customers beverage cost
         
-        customerInterval = random.randrange(customerIntervalMin, customerIntervalMax+1)
+        customerInterval = random.randrange(customerIntervalMin, (customerIntervalMax+1) - barReputation)
         time.sleep(customerInterval)                
 
-        printInterface(bar, beveragesLevel, beverageUnlockCost, cash)
+        printInterface(bar, beveragesLevel, beverageUnlockCost)
         
         # Handling user input
         """If you want to show all beverages and thread and semaphore working correctly, remove
         2 lines below and modify beverages level above.
         """
         userInput = int(input("Choose an option: "))
-        cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost)
+        cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
 
         # Test lines
         # print("*" * 40)
