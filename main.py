@@ -192,9 +192,11 @@ def inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost):
     # User chose to aquire new beverage.
     elif userInput == 1:
         if cash >= beverageUnlockCost:
-            cash -= beverageUnlockCost
-            beveragesLevel += 1
-            beverageUnlockCost *= 10
+            cash -= beverageUnlockCost  # Subtracts new beverage cost from cash
+            beveragesLevel += 1         # Beverages levels up
+            beverageUnlockCost *= 10    # Cost to unlock next beverage is previous cost * 10
+            print("Unclocked {0}".format(beverages[beveragesLevel][0]))
+            print("*" * 40)
 
             return cash, beveragesLevel, beverageUnlockCost
 
@@ -239,6 +241,9 @@ if __name__ == '__main__':
         printInterface(bar, beveragesLevel, beverageUnlockCost, cash)
         
         # Handling user input
+        """If you want to show all beverages and thread and semaphore working correctly, remove
+        2 lines below and modify beverages level above.
+        """
         userInput = int(input("Choose an option: "))
         cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, cash, beveragesLevel, beverageUnlockCost)
 
