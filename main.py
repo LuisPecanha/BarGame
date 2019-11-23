@@ -154,7 +154,7 @@ class BarTender:
         cash += customer.beverage.beverageCost
         print('Just gained ${0} .'.format(customer.beverage.beverageCost))
 
-def printInterface(bar ,beveragesLevel, beverageUnlockCost):
+def printInterface(bar ,beveragesLevel, beverageUnlockCost, numberOfVisits, barReputation):
     """Function to print the user interface showing him the available beverages that can be served at the bar
     at the current moment and the cost to upgrade them or unlock new ones. Will also show cost and the upgrades available for the number of seats.
 
@@ -167,7 +167,7 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost):
     global cash
 
     print("-" * 40)
-    print("Seats occupied: {0}/{1}".format(len(bar.waitingCustomers), bar.numberOfSeats))
+    print("Seats occupied: {0}/{1} | Number Of Visits: {2} | Bar Reputation: {3}".format(len(bar.waitingCustomers), bar.numberOfSeats, numberOfVisits, barReputation))
     print("Available drinks:")
     if (beveragesLevel == 0):
         print("{0}.{1}\t Prepare Time: {2} Price: {3} Level: {4} Upgrade Cost: {5}".format(beveragesLevel+1, beverages[0][0], beverages[0][1], beverages[0][2], beverages[0][3],  beverages[0][4]))
@@ -230,6 +230,7 @@ def checkReputation(barReputation, numberOfVisits):
             return 0
         elif (numberOfVisits % 100) == 0:
             barReputation += 1
+            print("\nReputation went up by 1!!!\n")
             return barReputation
 
     return barReputation
@@ -254,11 +255,19 @@ if __name__ == '__main__':
     bartender = BarTender()
 
     bar = Bar(bartender, customerIntervalMin, customerIntervalMax, numberOfSeats=3)
-    printInterface(bar, beveragesLevel, beverageUnlockCost)
     bar.openShop()
 
     while len(customers) > 0:
+
+        printInterface(bar, beveragesLevel, beverageUnlockCost, numberOfVisits, barReputation)
         
+        # Handling user input
+        """If you want to show all beverages and thread and semaphore working correctly, remove
+        2 lines below and modify beverages level above.
+        """
+        userInput = int(input("Choose an option: "))
+        cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
+
         c = customers.pop()                                                     # Gets a customer from customer list
         numberOfVisits += 1                                                     # +1 visitor
         barReputation = checkReputation(barReputation, numberOfVisits)          # Updates bar reputation if necessary
@@ -269,15 +278,6 @@ if __name__ == '__main__':
         customerIntervalMax -= barReputation     
         customerInterval = random.randrange(customerIntervalMin, (customerIntervalMax+1))
         time.sleep(customerInterval)                
-
-        printInterface(bar, beveragesLevel, beverageUnlockCost)
-        
-        # Handling user input
-        """If you want to show all beverages and thread and semaphore working correctly, remove
-        2 lines below and modify beverages level above.
-        """
-        userInput = int(input("Choose an option: "))
-        cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
         
         # Test lines
         # print("*" * 40)
