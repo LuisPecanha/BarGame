@@ -182,6 +182,51 @@ def printInterface(bar ,beveragesLevel, beverageUnlockCost, numberOfVisits, barR
     print("Options available: 1 -> Unlock new drink | 2 -> Upgrade Caju | 3 -> Upgrade Corote | 4 -> Upgrade Suco de Bagre | 5 -> Upgrade Margarita | 6 -> Upgrade Piña Colada | 9 -> Continue")
     print("-" * 40)
 
+def automaticMode(beveragesLevel, beverageUnlockCost):
+    """Function that simulates an AI playing the game.
+
+    Args:
+        beveragesLevel (int): Stores number of beverages bar has unlocked.
+        beveragesUnlockCost (int): Cash necessary to unlock next beverage.
+    """
+
+    global cash
+
+    # List to store the cost of upgrading all beverages
+    options = []
+
+    for index in range(5):
+        options.append(beverages[index][4])
+
+    # Stores cost to unlock new beverage as last element of options
+    options.append(beverageUnlockCost)
+
+    # Checks to upgrade Caju
+    if cash >= options[0]:
+        return inputHandler(2, beveragesLevel, beverageUnlockCost)
+
+    # Checks to upgrade Corote
+    elif cash >= options[1] and beveragesLevel >= 1:
+        return inputHandler(3, beveragesLevel, beverageUnlockCost)
+
+    # Checks to upgrade Suco de Bagre
+    elif cash >= options[2] and beveragesLevel >= 2:
+        return inputHandler(4, beveragesLevel, beverageUnlockCost)
+
+    # Checks to upgrade Margarita
+    elif cash >= options[3] and beveragesLevel >= 3:
+        return inputHandler(5, beveragesLevel, beverageUnlockCost)
+
+    # Checks to upgrade Piña Colada
+    elif cash >= options[4] and beveragesLevel >= 4:
+        return inputHandler(6, beveragesLevel, beverageUnlockCost)
+
+    # Checks to unlock new Beverage
+    elif cash >= options[5] and beveragesLevel <= 4:
+        return inputHandler(1, beveragesLevel, beverageUnlockCost)
+
+    return cash, beveragesLevel, beverageUnlockCost
+
 def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
     """Function to handle the input that player chooses and do the acordding actions
 
@@ -220,7 +265,7 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
         if cash >= beverages[0][4]:
             cash -= beverages[0][4]                             # Subtracts Caju upgrade cost from cash
             beverages[0][3] += 1                                # Upgrades Caju level
-            beverages[0][4] * 2                                 # Increases next Caju upgrade cost by twice its previous cost
+            beverages[0][4] *= 2                                 # Increases next Caju upgrade cost by twice its previous cost
             beverages[0][1] /= beverages[0][3]                  # Decreases Caju preparation time by half
             print("Upgraded {0} skills!".format(beverages[0][0]))   # Prints out upgrade message
 
@@ -236,7 +281,7 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
             if cash >= beverages[1][4]:
                 cash -= beverages[1][4]                             # Subtracts Corote upgrade cost from cash
                 beverages[1][3] += 1                                # Upgrades Corote level
-                beverages[1][4] * 2                                 # Increases next Corote upgrade cost by twice its previous cost
+                beverages[1][4] *= 2                                 # Increases next Corote upgrade cost by twice its previous cost
                 beverages[1][1] /= beverages[1][3]                  # Decreases Corote preparation time by half
                 print("Upgraded {0} skills!".format(beverages[1][0]))   # Prints out upgrade message
 
@@ -254,7 +299,7 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
             if cash >= beverages[2][4]:
                 cash -= beverages[2][4]                             # Subtracts Suco de Bagre upgrade cost from cash
                 beverages[2][3] += 1                                # Upgrades Suco de Bagre level
-                beverages[2][4] * 2                                 # Increases next Suco de Bagre upgrade cost by twice its previous cost
+                beverages[2][4] *= 2                                 # Increases next Suco de Bagre upgrade cost by twice its previous cost
                 beverages[2][1] /= beverages[2][3]                  # Decreases Suco de Bagre preparation time by half
                 print("Upgraded {0} skills!".format(beverages[2][0]))   # Prints out upgrade message
 
@@ -272,7 +317,7 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
             if cash >= beverages[3][4]:
                 cash -= beverages[3][4]                             # Subtracts Margarita upgrade cost from cash
                 beverages[3][3] += 1                                # Upgrades Margarita level
-                beverages[3][4] * 2                                 # Increases next Margarita upgrade cost by twice its previous cost
+                beverages[3][4] *= 2                                 # Increases next Margarita upgrade cost by twice its previous cost
                 beverages[3][1] /= beverages[3][3]                  # Decreases Margarita preparation time by half
                 print("Upgraded {0} skills!".format(beverages[3][0]))   # Prints out upgrade message
 
@@ -290,7 +335,7 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
             if cash >= beverages[4][4]:
                 cash -= beverages[4][4]                             # Subtracts Piña Colada upgrade cost from cash
                 beverages[4][3] += 1                                # Upgrades Piña Colada level
-                beverages[4][4] * 2                                 # Increases next Piña Colada upgrade cost by twice its previous cost
+                beverages[4][4] *= 2                                 # Increases next Piña Colada upgrade cost by twice its previous cost
                 beverages[4][1] /= beverages[4][3]                  # Decreases Piña Colada preparation time by half
                 print("Upgraded {0} skills!".format(beverages[4][0]))   # Prints out upgrade message
 
@@ -358,8 +403,13 @@ if __name__ == '__main__':
         """If you want to show all beverages and thread and semaphore working correctly, remove
         2 lines below and modify beverages level above.
         """
-        userInput = int(input("Choose an option: "))
-        cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
+        
+        # userInput = int(input("Choose an option: "))
+        # cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
+
+        """ Comment out to return to manual mode. 
+        """
+        cash, beveragesLevel, beverageUnlockCost = automaticMode(beveragesLevel, beverageUnlockCost)
 
         c = customers.pop()                                                     # Gets a customer from customer list
         numberOfVisits += 1                                                     # +1 visitor
