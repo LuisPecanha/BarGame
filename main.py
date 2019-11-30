@@ -354,7 +354,7 @@ def inputHandler(userInput, beveragesLevel, beverageUnlockCost):
 
     return cash, beveragesLevel, beverageUnlockCost
 
-def checkReputation(barReputation, numberOfVisits):
+def checkReputation(barReputation, numberOfVisits, customerIntervalMax):
     """Checks number of visits of bar and updates the reputation when necessary
 
     Args:
@@ -366,12 +366,12 @@ def checkReputation(barReputation, numberOfVisits):
     else:
         if numberOfVisits == 0:
             return 0
-        elif (numberOfVisits % 100) == 0:
+        elif (numberOfVisits % 50) == 0:
             barReputation += 1
             print("\nReputation went up by 1!!!\n")
             return barReputation
 
-    return barReputation
+    return barReputation, customerIntervalMax
     
 
 if __name__ == '__main__':
@@ -393,9 +393,12 @@ if __name__ == '__main__':
     bartender = BarTender()
 
     bar = Bar(bartender, customerIntervalMin, customerIntervalMax, numberOfSeats=3)
+    
+    chooseMode = int(input("Choose which game mode to be played:\n1 - Manual\n2 - Automatic (For Demonstration Purposes)\n:"))
+    
     bar.openShop()
 
-    while len(customers) > 0:
+    while True:
 
         printInterface(bar, beveragesLevel, beverageUnlockCost, numberOfVisits, barReputation)
         
@@ -403,22 +406,22 @@ if __name__ == '__main__':
         """If you want to show all beverages and thread and semaphore working correctly, remove
         2 lines below and modify beverages level above.
         """
-        
-        # userInput = int(input("Choose an option: "))
-        # cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
+        # Manual Mode
+        if (chooseMode == 1):
+            userInput = int(input("Choose an option: "))
+            cash, beveragesLevel, beverageUnlockCost = inputHandler(userInput, beveragesLevel, beverageUnlockCost)
 
-        """ Comment out to return to manual mode. 
-        """
-        cash, beveragesLevel, beverageUnlockCost = automaticMode(beveragesLevel, beverageUnlockCost)
+        #Auotmatic Mode
+        elif (chooseMode == 2):
+            cash, beveragesLevel, beverageUnlockCost = automaticMode(beveragesLevel, beverageUnlockCost)
 
         c = customers.pop()                                                     # Gets a customer from customer list
         numberOfVisits += 1                                                     # +1 visitor
-        barReputation = checkReputation(barReputation, numberOfVisits)          # Updates bar reputation if necessary
+        barReputation, customerIntervalMax = checkReputation(barReputation, numberOfVisits, customerIntervalMax)          # Updates bar reputation if necessary
         customers.append(Customer(beveragesLevel))                              # Appends a new customer to list
         # New customer enters the bar
         bar.enterBar(c)
         
-        customerIntervalMax -= barReputation     
         customerInterval = random.randrange(customerIntervalMin, (customerIntervalMax+1))
         time.sleep(customerInterval)                
         
